@@ -2,6 +2,9 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/:restaurantId([0-9]{3})", "destination": "/index.html" }
+    {
+      "source": "/:restaurantId",
+      "destination": "/index.html"
+    }
   ]
 }
