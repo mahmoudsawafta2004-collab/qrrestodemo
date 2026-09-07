@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading...</title>
+<style>
+/* Inlined so it paints instantly on the very first request to the domain,
+   before anything else has to load over the network. */
+html, body { margin: 0; padding: 0; }
+.app-splash { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; }
+.app-splash img { max-width: 130px; max-height: 130px; object-fit: contain; }
+</style>
+<script src="js/store.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+(async function () {
+  // If this page was opened through a demo URL such as /001, remember
+  // that restaurant so all following pages keep the same logo.
+  const demoMatch = location.pathname.match(/^\/(?:r\/)?([0-9]{3})(?:\/)?$/);
+  if (demoMatch) localStorage.setItem('qrresto_demo_restaurant', demoMatch[1]);
+
+  await Store.ready;
+  const settings = Store.get().settings;
+  const logo = settings.logo;
+  if (logo) {
+    const img = document.getElementById('splashLogo');
+    if (img) {
+      const candidates = Store.get()._demoLogoCandidates || [logo];
+      let i = 0;
+      const tryNext = () => {
+        if (i >= candidates.length) return;
+        img.src = candidates[i++];
+        img.style.display = 'block';
+      };
+      img.onerror = tryNext;
+      tryNext();
+    }
+  }
+  applyDocDir();
+  const settings = Store.get().settings;
+  const branches = Store.get().branches;
+  if (settings.multiBranch && branches.length > 1) {
+    location.replace('branches.html');
+  } else {
+    if (branches.length >= 1 && !Store.getSelectedBranch()) {
+      Store.setSelectedBranch(branches[0].id);
+    }
+    location.replace('menu.html');
+  }
+})();
+</script>
+</head>
+<body>
+  <div class="app-splash"><img id="splashLogo" alt="" style="display:none;"></div>
+</body>
+</html>
