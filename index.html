@@ -38,7 +38,6 @@ html, body { margin: 0; padding: 0; }
     }
   }
   applyDocDir();
-  const settings = Store.get().settings;
   const branches = Store.get().branches;
   if (settings.multiBranch && branches.length > 1) {
     location.replace('branches.html');
