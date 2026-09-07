@@ -3,7 +3,7 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/:restaurantId",
+      "source": "/:restaurantId([0-9]{3})",
       "destination": "/index.html"
     }
   ]
